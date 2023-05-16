@@ -2,7 +2,7 @@ import typescript from "@rollup/plugin-typescript";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
-import terser from "@rollup/plugin-terser";
+// import terser from "@rollup/plugin-terser";
 import rm from "rimraf";
 
 rm.sync(`./dist`);
@@ -17,7 +17,9 @@ export default {
       format: "esm",
       esModule: true,
       inlineDynamicImports: true,
-      plugins: [terser()],
+      plugins: [
+        // terser()
+      ],
     },
   ],
   onwarn() {},
