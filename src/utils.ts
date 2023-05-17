@@ -8,6 +8,7 @@ export class ActionUtils {
     }
 
     private init() {
+        console.log(process.env)
         let fnName: string, params: string[];
         if (core.getInput("params")) {
             fnName = core.getInput("function");
