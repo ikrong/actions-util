@@ -10,7 +10,7 @@ export class ActionUtils {
     private init() {
         let fnName: string, params: string[];
         if (core.getInput("params")) {
-            fnName = core.getInput("params");
+            fnName = core.getInput("function");
             params = JSON.parse(core.getInput("params"));
         } else {
             const inputNames = Object.keys(process.env)
