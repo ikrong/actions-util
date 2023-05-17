@@ -3,10 +3,32 @@ import fetch from "node-fetch";
 import _ from "lodash";
 
 export class ActionUtils {
-    constructor(fn?: string, params?: string) {
-        if (fn && params) {
+    constructor() {
+        this.init();
+    }
+
+    private init() {
+        let fnName: string, params: string[];
+        if (core.getInput("params")) {
+            fnName = core.getInput("params");
+            params = JSON.parse(core.getInput("params"));
+        } else {
+            const inputNames = Object.keys(process.env)
+                .filter((key) => key.startsWith("INPUT_"))
+                .map((key) => key.replace("INPUT_", ""));
+            const inputParams: any = {};
+            inputNames.map((name) => {
+                _.set(inputParams, name, core.getInput(name));
+            });
+            fnName = inputParams.function;
+            params = inputParams.params;
+        }
+        if (fnName && params) {
             // @ts-ignore
-            this[fn](...JSON.parse(params));
+            this[fn](...params);
+        } else {
+            core.getInput("function", { required: true });
+            core.getInput("params", { required: true });
         }
     }
 

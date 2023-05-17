@@ -20,6 +20,33 @@ import { isIP } from 'node:net';
 import 'node:fs';
 import 'node:path';
 
+/******************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+
+function __awaiter$1(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function getDefaultExportFromCjs (x) {
@@ -480,16 +507,16 @@ function version(uuid) {
 }
 
 var esmNode = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	NIL: nil,
-	parse: parse,
-	stringify: stringify,
-	v1: v1,
-	v3: v3$1,
-	v4: v4,
-	v5: v5$1,
-	validate: validate,
-	version: version
+    __proto__: null,
+    NIL: nil,
+    parse: parse,
+    stringify: stringify,
+    v1: v1,
+    v3: v3$1,
+    v4: v4,
+    v5: v5$1,
+    validate: validate,
+    version: version
 });
 
 var require$$2 = /*@__PURE__*/getAugmentedNamespace(esmNode);
@@ -1506,7 +1533,7 @@ var tunnel = tunnel$1;
 
 var auth = {};
 
-var __awaiter$1 = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __awaiter = (commonjsGlobal && commonjsGlobal.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -1533,7 +1560,7 @@ class BasicCredentialHandler {
         return false;
     }
     handleAuthentication() {
-        return __awaiter$1(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             throw new Error('not implemented');
         });
     }
@@ -1556,7 +1583,7 @@ class BearerCredentialHandler {
         return false;
     }
     handleAuthentication() {
-        return __awaiter$1(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             throw new Error('not implemented');
         });
     }
@@ -1579,7 +1606,7 @@ class PersonalAccessTokenCredentialHandler {
         return false;
     }
     handleAuthentication() {
-        return __awaiter$1(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             throw new Error('not implemented');
         });
     }
@@ -2377,33 +2404,6 @@ function requireCore () {
 }
 
 var coreExports = requireCore();
-
-/******************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-
-function __awaiter(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-}
 
 /**
  * Returns a `Buffer` instance from the given data URI `uri`.
@@ -26278,14 +26278,37 @@ var lodashExports = lodash.exports;
 var _ = /*@__PURE__*/getDefaultExportFromCjs(lodashExports);
 
 class ActionUtils {
-    constructor(fn, params) {
-        if (fn && params) {
+    constructor() {
+        this.init();
+    }
+    init() {
+        let fnName, params;
+        if (coreExports.getInput("params")) {
+            fnName = coreExports.getInput("params");
+            params = JSON.parse(coreExports.getInput("params"));
+        }
+        else {
+            const inputNames = Object.keys(process.env)
+                .filter((key) => key.startsWith("INPUT_"))
+                .map((key) => key.replace("INPUT_", ""));
+            const inputParams = {};
+            inputNames.map((name) => {
+                _.set(inputParams, name, coreExports.getInput(name));
+            });
+            fnName = inputParams.function;
+            params = inputParams.params;
+        }
+        if (fnName && params) {
             // @ts-ignore
-            this[fn](...JSON.parse(params));
+            this[fn](...params);
+        }
+        else {
+            coreExports.getInput("function", { required: true });
+            coreExports.getInput("params", { required: true });
         }
     }
     fetch(url, method = "get", keys = []) {
-        return __awaiter(this, void 0, void 0, function* () {
+        return __awaiter$1(this, void 0, void 0, function* () {
             const resp = yield fetch(url, {
                 method,
             });
@@ -26310,7 +26333,7 @@ class ActionUtils {
         });
     }
     docker(username, password, repo, info) {
-        return __awaiter(this, void 0, void 0, function* () {
+        return __awaiter$1(this, void 0, void 0, function* () {
             const resp = (yield (yield fetch("https://hub.docker.com/v2/users/login", {
                 body: JSON.stringify({
                     username,
@@ -26354,7 +26377,7 @@ class ActionUtils {
     }
 }
 
-new ActionUtils(coreExports.getInput("function", { required: true }), coreExports.getInput("params", { required: true }));
+new ActionUtils();
 
 let s = 0;
 const S = {
@@ -26787,6 +26810,6 @@ async function toFormData(Body, ct) {
 }
 
 var multipartParser = /*#__PURE__*/Object.freeze({
-	__proto__: null,
-	toFormData: toFormData
+    __proto__: null,
+    toFormData: toFormData
 });
