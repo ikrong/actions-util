@@ -26300,7 +26300,7 @@ class ActionUtils {
         }
         if (fnName && params) {
             // @ts-ignore
-            this[fn](...params);
+            this[fnName](...params);
         }
         else {
             coreExports.getInput("function", { required: true });

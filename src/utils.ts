@@ -25,7 +25,7 @@ export class ActionUtils {
         }
         if (fnName && params) {
             // @ts-ignore
-            this[fn](...params);
+            this[fnName](...params);
         } else {
             core.getInput("function", { required: true });
             core.getInput("params", { required: true });
