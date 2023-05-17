@@ -8,7 +8,7 @@ export class ActionUtils {
     }
 
     private init() {
-        console.log(process.env)
+        // 经过测试 actions 仅支持变量名为小写字母
         let fnName: string, params: string[];
         if (core.getInput("params")) {
             fnName = core.getInput("function");
@@ -24,7 +24,6 @@ export class ActionUtils {
             fnName = inputParams.function;
             params = inputParams.params;
         }
-        console.log(fnName, params);
         if (fnName && params) {
             // @ts-ignore
             this[fnName](...params);

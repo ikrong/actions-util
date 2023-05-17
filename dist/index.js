@@ -26282,7 +26282,7 @@ class ActionUtils {
         this.init();
     }
     init() {
-        console.log(process.env);
+        // 经过测试 actions 仅支持变量名为小写字母
         let fnName, params;
         if (coreExports.getInput("params")) {
             fnName = coreExports.getInput("function");
@@ -26299,7 +26299,6 @@ class ActionUtils {
             fnName = inputParams.function;
             params = inputParams.params;
         }
-        console.log(fnName, params);
         if (fnName && params) {
             // @ts-ignore
             this[fnName](...params);
