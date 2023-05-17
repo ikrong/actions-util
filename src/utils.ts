@@ -18,7 +18,7 @@ export class ActionUtils {
                 .map((key) => key.replace("INPUT_", ""));
             const inputParams: any = {};
             inputNames.map((name) => {
-                _.set(inputParams, name, core.getInput(name));
+                _.set(inputParams, name.toLowerCase(), core.getInput(name));
             });
             fnName = inputParams.function;
             params = inputParams.params;

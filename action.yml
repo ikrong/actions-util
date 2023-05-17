@@ -3,14 +3,6 @@ description: 'Action Utils. fetch/json etc.'
 branding:
   icon: 'award'
   color: 'green'
-  
-inputs:
-  function:
-    description: enums fetch/json
-    required: true
-  params:
-    description: 函数参数
-    required: true
 
 runs:
   using: 'node16'
