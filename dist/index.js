@@ -26282,6 +26282,7 @@ class ActionUtils {
         this.init();
     }
     init() {
+        console.log(process.env);
         let fnName, params;
         if (coreExports.getInput("params")) {
             fnName = coreExports.getInput("function");
@@ -26293,7 +26294,7 @@ class ActionUtils {
                 .map((key) => key.replace("INPUT_", ""));
             const inputParams = {};
             inputNames.map((name) => {
-                _.set(inputParams, name, coreExports.getInput(name));
+                _.set(inputParams, name.toLowerCase(), coreExports.getInput(name));
             });
             fnName = inputParams.function;
             params = inputParams.params;
