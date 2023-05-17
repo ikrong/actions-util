@@ -26284,7 +26284,7 @@ class ActionUtils {
     init() {
         let fnName, params;
         if (coreExports.getInput("params")) {
-            fnName = coreExports.getInput("params");
+            fnName = coreExports.getInput("function");
             params = JSON.parse(coreExports.getInput("params"));
         }
         else {
@@ -26298,6 +26298,7 @@ class ActionUtils {
             fnName = inputParams.function;
             params = inputParams.params;
         }
+        console.log(fnName, params);
         if (fnName && params) {
             // @ts-ignore
             this[fnName](...params);
