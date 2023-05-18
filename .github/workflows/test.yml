@@ -1,0 +1,36 @@
+name: Test Actions Util
+
+on:
+    push:
+        branches: ["main"]
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: test fetch
+              uses: ./
+              with:
+                  function: fetch
+                  params.0: https://api.github.com/repos/apache/echarts/releases/latest
+                  params.1: get
+                  params.2.0: tag_name
+                  params.2.1: author.login
+            - name: test fetch output
+              run: |
+                  echo tag_name=${{env.tag_name}}
+                  echo author_login=${{env.author_login}}
+
+            - name: test yaml
+              uses: ./
+              with:
+                 function: yaml
+                 params.0.file: action.yml
+                 params.0.keys.0: description
+                 params.0.keys.0: runs.using
+            - name: test yaml output
+              run: |
+                  echo description=${{env.description}}
+                  echo runs_using=${{env.runs_using}}

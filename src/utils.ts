@@ -1,6 +1,9 @@
 import * as core from "@actions/core";
 import fetch from "node-fetch";
 import _ from "lodash";
+import yaml from "yaml";
+import path from "path";
+import fs from "fs";
 
 export class ActionUtils {
     constructor() {
@@ -40,20 +43,51 @@ export class ActionUtils {
         const text = await resp.text();
         try {
             const json = JSON.parse(text);
-            if (keys && keys.length) {
-                this.setVariable(
-                    keys.reduce((data, key) => {
-                        data[key.replace(/[\.\[\]]/g, "_")] = _.get(json, key);
-                        return data;
-                    }, {} as any)
-                );
-            } else {
-                this.setVariable(this.flatObject(JSON.parse(text)));
-            }
+            this.objectToVariable(json, keys);
         } catch (error) {
             this.setVariable({
                 body: text,
             });
+        }
+    }
+
+    json(config: { file?: string; text?: string; keys?: string[] }) {
+        let obj: any;
+        if (config.file) {
+            obj = JSON.parse(this.getFileText(config.file));
+        } else if (config.text) {
+            obj = JSON.parse(config.text);
+        }
+        this.objectToVariable(obj, config.keys);
+    }
+
+    yaml(config: { file?: string; text?: string; keys?: string[] }) {
+        let obj: any;
+        if (config.file) {
+            obj = yaml.parse(this.getFileText(config.file));
+        } else if (config.text) {
+            obj = yaml.parse(config.text);
+        }
+        this.objectToVariable(obj, config.keys);
+    }
+
+    private getFileText(file: string) {
+        const env: any = process.env;
+        return fs
+            .readFileSync(path.join(env.GITHUB_WORKSPACE, file))
+            .toString();
+    }
+
+    private objectToVariable(data: any, keys: string[] = []) {
+        if (keys && keys.length) {
+            this.setVariable(
+                keys.reduce((data, key) => {
+                    data[key.replace(/[\.\[\]]/g, "_")] = _.get(data, key);
+                    return data;
+                }, {} as any)
+            );
+        } else {
+            this.setVariable(this.flatObject(data));
         }
     }
 

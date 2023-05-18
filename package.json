@@ -25,6 +25,7 @@
     "rimraf": "^3.0.2",
     "rollup": "^3.21.7",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "yaml": "^2.2.2"
   }
 }
