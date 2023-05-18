@@ -27,6 +27,10 @@ export class ActionUtils {
             fnName = inputParams.function;
             params = inputParams.params;
         }
+        console.log("---------------");
+        console.log(fnName);
+        console.log(params);
+        console.log("---------------");
         if (fnName && params) {
             // @ts-ignore
             this[fnName](...params);
