@@ -34187,6 +34187,8 @@ class ActionUtils {
         else if (config.text) {
             obj = dist.parse(config.text);
         }
+        console.log(obj);
+        console.log(config.keys);
         this.objectToVariable(obj, config.keys);
     }
     getFileText(file) {

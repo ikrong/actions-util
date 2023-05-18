@@ -72,6 +72,8 @@ export class ActionUtils {
         } else if (config.text) {
             obj = yaml.parse(config.text);
         }
+        console.log(obj)
+        console.log(config.keys)
         this.objectToVariable(obj, config.keys);
     }
 
