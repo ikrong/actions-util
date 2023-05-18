@@ -34197,15 +34197,15 @@ class ActionUtils {
             .readFileSync(require$$0$2.join(env.GITHUB_WORKSPACE, file))
             .toString();
     }
-    objectToVariable(data, keys = []) {
+    objectToVariable(obj, keys = []) {
         if (keys && keys.length) {
             this.setVariable(keys.reduce((data, key) => {
-                data[key.replace(/[\.\[\]]/g, "_")] = _.get(data, key);
+                data[key.replace(/[\.\[\]]/g, "_")] = _.get(obj, key);
                 return data;
             }, {}));
         }
         else {
-            this.setVariable(this.flatObject(data));
+            this.setVariable(this.flatObject(obj));
         }
     }
     docker(username, password, repo, info) {

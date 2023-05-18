@@ -84,16 +84,16 @@ export class ActionUtils {
             .toString();
     }
 
-    private objectToVariable(data: any, keys: string[] = []) {
+    private objectToVariable(obj: any, keys: string[] = []) {
         if (keys && keys.length) {
             this.setVariable(
                 keys.reduce((data, key) => {
-                    data[key.replace(/[\.\[\]]/g, "_")] = _.get(data, key);
+                    data[key.replace(/[\.\[\]]/g, "_")] = _.get(obj, key);
                     return data;
                 }, {} as any)
             );
         } else {
-            this.setVariable(this.flatObject(data));
+            this.setVariable(this.flatObject(obj));
         }
     }
 
