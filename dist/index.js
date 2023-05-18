@@ -34234,6 +34234,10 @@ class ActionUtils {
     }
     setVariable(data) {
         Object.keys(data).map((key) => {
+            console.log("-------");
+            console.log(key.replace(/[\.\[\]]/g, "_"));
+            console.log(data[key]);
+            console.log("-------");
             coreExports.exportVariable(key.replace(/[\.\[\]]/g, "_"), data[key]);
         });
     }

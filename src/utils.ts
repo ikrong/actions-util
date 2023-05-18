@@ -72,8 +72,8 @@ export class ActionUtils {
         } else if (config.text) {
             obj = yaml.parse(config.text);
         }
-        console.log(obj)
-        console.log(config.keys)
+        console.log(obj);
+        console.log(config.keys);
         this.objectToVariable(obj, config.keys);
     }
 
@@ -134,6 +134,10 @@ export class ActionUtils {
 
     private setVariable(data: Record<string, string>) {
         Object.keys(data).map((key) => {
+            console.log("-------");
+            console.log(key.replace(/[\.\[\]]/g, "_"));
+            console.log(data[key]);
+            console.log("-------");
             core.exportVariable(key.replace(/[\.\[\]]/g, "_"), data[key]);
         });
     }
