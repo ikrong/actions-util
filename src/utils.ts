@@ -27,10 +27,8 @@ export class ActionUtils {
             fnName = inputParams.function;
             params = inputParams.params;
         }
-        core.startGroup("action utils get params");
         core.debug(fnName);
         core.debug(JSON.stringify(params));
-        core.endGroup();
         if (fnName && params) {
             // @ts-ignore
             this[fnName](...params);
@@ -47,9 +45,7 @@ export class ActionUtils {
         const text = await resp.text();
         try {
             const json = JSON.parse(text);
-            core.startGroup("fetch tool get response");
             core.debug(text);
-            core.endGroup();
             this.objectToVariable(json, keys);
         } catch (error) {
             this.setVariable({
@@ -65,10 +61,8 @@ export class ActionUtils {
         } else if (config.text) {
             obj = JSON.parse(config.text);
         }
-        core.startGroup("json tool get");
         core.debug(JSON.stringify(config));
         core.debug(JSON.stringify(obj));
-        core.endGroup();
         this.objectToVariable(obj, config.keys);
     }
 
@@ -79,10 +73,8 @@ export class ActionUtils {
         } else if (config.text) {
             obj = yaml.parse(config.text);
         }
-        core.startGroup("yaml tool get");
         core.debug(JSON.stringify(config));
         core.debug(JSON.stringify(obj));
-        core.endGroup();
         this.objectToVariable(obj, config.keys);
     }
 
@@ -143,9 +135,7 @@ export class ActionUtils {
 
     private setVariable(data: Record<string, string>) {
         Object.keys(data).map((key) => {
-            core.startGroup("actions util set variables");
             core.debug(`${key.replace(/[\.\[\]]/g, "_")}=${data[key]}`);
-            core.endGroup();
             core.exportVariable(key.replace(/[\.\[\]]/g, "_"), data[key]);
         });
     }

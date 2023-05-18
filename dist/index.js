@@ -34139,10 +34139,8 @@ class ActionUtils {
             fnName = inputParams.function;
             params = inputParams.params;
         }
-        coreExports.startGroup("action utils get params");
         coreExports.debug(fnName);
         coreExports.debug(JSON.stringify(params));
-        coreExports.endGroup();
         if (fnName && params) {
             // @ts-ignore
             this[fnName](...params);
@@ -34160,9 +34158,7 @@ class ActionUtils {
             const text = yield resp.text();
             try {
                 const json = JSON.parse(text);
-                coreExports.startGroup("fetch tool get response");
                 coreExports.debug(text);
-                coreExports.endGroup();
                 this.objectToVariable(json, keys);
             }
             catch (error) {
@@ -34180,10 +34176,8 @@ class ActionUtils {
         else if (config.text) {
             obj = JSON.parse(config.text);
         }
-        coreExports.startGroup("json tool get");
         coreExports.debug(JSON.stringify(config));
         coreExports.debug(JSON.stringify(obj));
-        coreExports.endGroup();
         this.objectToVariable(obj, config.keys);
     }
     yaml(config) {
@@ -34194,10 +34188,8 @@ class ActionUtils {
         else if (config.text) {
             obj = dist.parse(config.text);
         }
-        coreExports.startGroup("yaml tool get");
         coreExports.debug(JSON.stringify(config));
         coreExports.debug(JSON.stringify(obj));
-        coreExports.endGroup();
         this.objectToVariable(obj, config.keys);
     }
     getFileText(file) {
@@ -34243,9 +34235,7 @@ class ActionUtils {
     }
     setVariable(data) {
         Object.keys(data).map((key) => {
-            coreExports.startGroup("actions util set variables");
             coreExports.debug(`${key.replace(/[\.\[\]]/g, "_")}=${data[key]}`);
-            coreExports.endGroup();
             coreExports.exportVariable(key.replace(/[\.\[\]]/g, "_"), data[key]);
         });
     }
