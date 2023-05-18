@@ -29,7 +29,7 @@ jobs:
                  function: yaml
                  params.0.file: action.yml
                  params.0.keys.0: description
-                 params.0.keys.0: runs.using
+                 params.0.keys.1: runs.using
             - name: test yaml output
               run: |
                   echo description=${{env.description}}
