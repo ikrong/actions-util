@@ -34201,7 +34201,7 @@ class ActionUtils {
     objectToVariable(obj, keys = []) {
         if (keys && keys.length) {
             this.setVariable(keys.reduce((data, key) => {
-                data[key.replace(/[\.\[\]]/g, "_")] = _.get(obj, key);
+                data[key.replace(/[^\w]/g, '_')] = _.get(obj, key);
                 return data;
             }, {}));
         }
